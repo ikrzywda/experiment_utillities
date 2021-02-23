@@ -1,34 +1,32 @@
 #!/usr/bin/python
 
-import csv
 import sys
 import numpy as np
 from matplotlib import pyplot as plt
-import itertools
-
-# V = IR, R = V / I, I = V / R
 
 def parse_data(filename):
+
     data = np.genfromtxt(filename, delimiter=',',names=["x", "y"])
 
-    #x = np.zeros(len(data))
-    #y = np.zeros(len(data))
-    #
-    #inx = 0
-
     for i in data:
-        #i['y'] = (5/1024) * i['x'] 
-        #i['x'] = ((5/1024) * i['y']) * 10000
-        i['x'] = 1024 - i['x']
+        i['x'] = ((5/1024) * i['x']) * 10000
+        i['y'] = (5/1024) * i['y'] 
 
-    x = np.arange(len(data))
+    return data
 
-    np.sort(data)
-
-    plt.plot(x,data['x'])
+def plot(data):
     plt.plot(data['x'], data['y'])
+
+    plt.xlabel('R2 [ohms]')
+    plt.ylabel('ouptut voltage [V]')
+    plt.title(sys.argv[2])
+
+    plt.savefig(sys.argv[2] + '.png')
     plt.show()
 
 
 if __name__ == '__main__':
-    parse_data(sys.argv[1])
+    if len(sys.argv) != 3:
+        print('compute_data <input csv> <plot name>')
+        exit()
+    plot(parse_data(sys.argv[1]))

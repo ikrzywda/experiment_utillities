@@ -14,16 +14,20 @@ def generate_data(r1,r3,vin):
     y = np.zeros(r1)
   
     for i in range(1, r1):
-        y[i] = (5 * i*r3) / ((r1-i)*(i+r3) + i*r3)
-        #y[i] = v_out((r1 - i),i,r3,vin)
+        y[i] = v_out((r1 - i),i,r3,vin)
 
     return x,y
 
 if __name__ == "__main__":
+    
+    if len(sys.argv) == 1:
+        print('theoretical_prediction <parallel load> <ploc title> <filename>')
+        sys.exit()
+
     x,y = generate_data(50000, int(sys.argv[1]), 5)
 
     plt.plot(x,y)
     plt.xlabel('R2 [ohms]')
     plt.ylabel('ouptut voltage [V]')
     plt.title(sys.argv[2])
-    plt.show()
+    plt.savefig(sys.argv[3])
